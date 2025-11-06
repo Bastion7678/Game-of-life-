@@ -2,6 +2,9 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using System.Reflection.PortableExecutable;
+using System.Runtime.InteropServices;
 class Program
 {
     static int GridWidth = 20;
@@ -9,13 +12,29 @@ class Program
     static bool[,] currentGeneration = new bool[GridWidth, GridHeight];
     static bool[,] nextGeneration = new bool[GridWidth, GridHeight];
     static Random random = new Random();
+
+    //Ascii variables
+    static characterAnimationStates CurrentAnimations = characterAnimationStates.Static;
+    static int XLocation = 10;
+    static int YLocation = 2;
+
+    enum characterAnimationStates
+    {
+        MovingLeft,
+        Static,
+        MovingRight,
+    }
     
+    //this is the display of the main menu
     static void Main(string[] args)
     {
+        Console.OutputEncoding = Encoding.UTFB;
+
         bool isInMenu = true;
         Console.WriteLine("1 - Game of Life");
         Console.WriteLine("2 - character");
         Console.WriteLine("3 - background");
+        Console.WriteLine("4 - Exit");
 
         ConsoleKey pressedKey = ConsoleKey.None;
 
@@ -38,6 +57,11 @@ class Program
                     pressedKey = ConsoleKey.D3;
                     isInMenu = false;
                 }
+                if (Console.ReadKey(true).Key == ConsoleKey.D4)
+                {
+                    pressedKey = ConsoleKey.D4;
+                    isInMenu = false;
+                }
             }
         }
         // this is what is the result of pressing the number keys as it takes you to the different menus
@@ -48,11 +72,15 @@ class Program
 
                 break;
             case ConsoleKey.D2:
-
+                ascii();
                 break;
 
             case ConsoleKey.D3:
+                background();
+                break;
 
+            case ConsoleKey.D4:
+                Environment.Exit(0);
                 break;
         }
   
@@ -178,5 +206,15 @@ class Program
         }
 
         return count;
+
+    }
+
+    static void ascii()
+    {
+
+    }
+    static void background()
+    {
+
     }
 }
