@@ -13,10 +13,16 @@ class Program
     static bool[,] nextGeneration = new bool[GridWidth, GridHeight];
     static Random random = new Random();
 
+    //Threading
+    public static ConsoleKey lastKey;
+    public static object Keylock = new object();
+
     //Ascii variables
     static characterAnimationStates CurrentAnimations = characterAnimationStates.Static;
     static int XLocation = 10;
     static int YLocation = 2;
+
+    private static characterAnimationStates CurrentAnimation { get; set; }
 
     enum characterAnimationStates
     {
@@ -28,7 +34,6 @@ class Program
     //this is the display of the main menu
     static void Main(string[] args)
     {
-        Console.OutputEncoding = Encoding.UTFB;
 
         bool isInMenu = true;
         Console.WriteLine("1 - Game of Life");
@@ -211,10 +216,131 @@ class Program
 
     static void ascii()
     {
+        Console.Clear();
+        Character();
+        Thread.Sleep(100);
 
+        Console.SetCursorPosition(0, 23);
     }
     static void background()
     {
 
+        Console.Clear();
+        Console.WriteLine("████████████████████████████████████");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █"); 
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("█                                  █");
+        Console.WriteLine("████████████████████████████████████");
+
+    }
+    static void Character()
+    {
+        //Xlocation
+        //YLocation
+
+        if (CurrentAnimation == characterAnimationStates.MovingLeft)
+        {
+            Console.SetCursorPosition(XLocation, YLocation);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 1);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 2);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 3);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 4);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 5);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 6);
+            Console.Write("███████");
+        }
+        else if (CurrentAnimation == characterAnimationStates.Static)
+        {
+            Console.SetCursorPosition(XLocation, YLocation);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 1);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 2);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 3);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 4);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 5);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 6);
+            Console.Write("███████");
+        }
+        else if (CurrentAnimation == characterAnimationStates.MovingRight)
+        {
+            Console.SetCursorPosition(XLocation, YLocation);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 1);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 2);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 3);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 4);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 5);
+            Console.Write("███████");
+            Console.SetCursorPosition(XLocation, YLocation + 6);
+            Console.Write("███████");
+        }
+
+        static void inputthreadloop()
+        {
+            while (true)
+            {
+                if (Console.KeyAvailable)
+                {
+                    lock (Keylock)
+                    {
+                        lastKey = Console.ReadKey().Key;
+
+                        if (lastKey == ConsoleKey.LeftArrow || lastKey == ConsoleKey.A)
+                        {
+                            CurrentAnimation = characterAnimationStates.MovingLeft;
+                            XLocation--;
+                        }
+                        else if (lastKey == ConsoleKey.RightArrow || lastKey == ConsoleKey.D)
+                        {
+                            CurrentAnimation = characterAnimationStates.MovingLeft;
+                            if (XLocation >= 10)
+                            {
+                                XLocation++;
+                            }
+                        }
+                        else if (lastKey == ConsoleKey.DownArrow || lastKey == ConsoleKey.S)
+                        {
+                            CurrentAnimation = characterAnimationStates.MovingLeft;
+                        }
+                        else
+                        {
+                            CurrentAnimation = characterAnimationStates.Static;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
